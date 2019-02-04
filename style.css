@@ -23,16 +23,35 @@ button {
 }
 /*  Classes */
 
-.headerOne {
+.header-one {
   font-size: 100px;
   padding: 20px;
 }
 
-.headerTwo {
+.header-two {
   font-size: 30px;
 }
 
 .green-goblins {
-  
+  position: absolute;
+  background-image: url(images/goblinsword.png);
+  background-position: 0px 0px;
+  width: 50px;
+  height: 60px;
+  transition: top 2s;
+  transition-timing-function: linear;
+
 }
+
+/* .green-goblins.walk {
+  background-position: ;
+} */
+
+.health {
+  font-size: 50px;
+  text-align: left;
+  color: white;
+  padding: 20px;
+}
+
 /*  IDs */
