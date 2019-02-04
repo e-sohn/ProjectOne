@@ -45,18 +45,45 @@ function createGoblin(bc){
     randomPos(goblins);
     document.body.appendChild(goblins);
 
+    let allGoblins = document.querySelectorAll('.green-goblins');
+    let currentGob = allGoblins[allGoblins.length - 1];
+
+    currentGob.addEventListener('click', () => {
+      slayGoblin(currentGob);
+    });
+
+    currentGob.addEventListener('click', () => {
+      setTimeout(() => {
+        removeGoblin(currentGob);
+      }, 1000);
+    });
+
+    setInterval(() => {goblins.classList.toggle('walk')}, 250);
     setInterval(() => {moveGoblin(goblins)}, 100);
 
     numberGoblins += 1;
     checkHowMany(20, bc);
 }
 
+//changes gobl div to slayed goblin
+function slayGoblin(gobl){
+    gobl.classList.add('slayed');
+}
+
+// const ducks = document.querySelectorAll('div');
+// ducks.forEach((individualDuck) => {
+//     individualDuck.addEventListener('click', () => {eventShot(individualDuck)});
+//   })
+
+//removes gob div
+function removeGoblin(gob){
+  gob.remove();
+}
+
+//moves goblin to the point where the wall is
 function moveGoblin(goblinOb){
   goblinOb.style.top = '500px';
 }
-
-// setInterval(() => {goblins.classList.toggle('walk')}, 250);
-
 
 //checks how many number of goblins and stops running function when it reaches limit
 function checkHowMany(limit, ab){
