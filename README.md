@@ -1,5 +1,5 @@
 # Purpose
-Defend the Castle is a game where the goal is to keep the castle intact before the enemy destroys it. There will be 20 goblins traversing the field starting from the left side and making their way to the wall on the right side. Players will click on the goblin to kill them. If the goblin reaches the wall on the right side, players health will reduce by one. If the health reaches 0, the player loses and the game will restart to the home page.
+Defend the Castle is a game where the goal is to keep the castle intact before the enemy destroys it. There will be 20 goblins traversing the field starting from the top and making their way to the wall on the bottom. Players will click on the goblin to kill them. If the goblin reaches the wall on the bottom, players health will reduce by one. If the health reaches 0, the player loses and the game will restart to the home page.
 
 #Game Mechanics
 Initial page where player inputs Name
@@ -24,6 +24,4 @@ Animation when castle health lowers
 
 #Potential problems
 Adjusting size of the window will change the location of the wall.
-How to create only 20 goblins and not an infinite amount of goblins.
-Objects interacting with the background
-How to get certain number of goblins to appear
+How to interact with the background

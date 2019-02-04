@@ -2,6 +2,9 @@ const desc = document.querySelector('.description');
 const button = document.querySelector('button');
 const input = document.querySelector('input');
 const form = document.querySelector('form');
+const headerOne = document.querySelector('.headerOne');
+const headerTwo = document.querySelector('.headerTwo');
+const header = document.querySelector('header');
 let numberGoblins = 0;
 let castleHealth = 5;
 
@@ -35,9 +38,24 @@ function checkHowMany(limit, ab){
   }
 }
 
+function addHealthScore(){
+  let healthScore = document.createElement('div');
+  healthScore.classList.add('health');
+  healthScore.innerHTML = `Health: ${castleHealth}`;
+  header.appendChild(healthScore);
+  header.style.fontSize = '50px';
+  header.style.textAlign = 'left';
+  header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+  header.style.color = '#fff';
+  header.style.padding = '20px';
+}
+
 //starts the game every time start button is pressed
 function startGame(ev){
   ev.preventDefault();
+  headerOne.remove();
+  headerTwo.remove();
+  addHealthScore();
   let goblinAppear = setInterval(() => {
     createGoblin(goblinAppear)}, 1000);
 }
