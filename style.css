@@ -68,9 +68,13 @@ footer {
   padding: 20px;
 }
 
+.results {
+  color: white;
+}
+
 /*  IDs */
 
-#try-again {
+#replay-button {
   font-size: 30px;
   padding: 10px;
 }

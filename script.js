@@ -11,6 +11,7 @@ let castleHealth = 5;
 let goblinTotal = 10; //how many goblins created
 let goblinSeconds = 5000; //how long it takes goblin to reach wall
 let secGob = 500; //how long for goblin to spawn
+let howFarDownGobWalk = '700px';
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -36,10 +37,26 @@ button.addEventListener('click', (ev) => {
   createButtonTwo();
 })
 
+//starts the game every time start button is pressed
+function startGame(ev){
+  ev.preventDefault();
+  headerOne.remove();
+  headerTwo.remove();
+
+  // let mainStuff = document.querySelector('main');
+  // mainStuff.children.remove();
+
+  castleHealth = 5;
+  addHealthScore();
+
+  let goblinAppear = setInterval(() => {
+  createGoblin(goblinAppear)}, secGob);
+}
+
 //positions goblin at random position on the top of page
 function randomPos(goblinObjects){
   goblinObjects.style.top = '-20px';
-  goblinObjects.style.left = Math.random() * window.innerWidth + 'px';
+  goblinObjects.style.left = Math.random() * (window.innerWidth - 50) + 'px';
 }
 
 //creates goblin with function it wants to stop as parameter
@@ -77,7 +94,7 @@ function clickDeath(eachGob, removeHealth, removeGoblinWall){
 
 //checks to see if gob div reaches the wall and will subtract 1 from health
 function checkGobToWall(specificGob){
-  if(specificGob.style.top === '500px'){
+  if(specificGob.style.top === howFarDownGobWalk){
     deleteHealth();
     let healthBar = document.querySelector('.health');
     healthBar.innerHTML = `Health: ${castleHealth}`;
@@ -98,7 +115,7 @@ function removeGoblin(gob){
 
 //moves goblin to the point where the wall is
 function moveGoblin(goblinOb){
-  goblinOb.style.top = '500px';
+  goblinOb.style.top = howFarDownGobWalk;
 }
 
 //checks how many number of goblins and stops running function when it reaches limit
@@ -110,20 +127,10 @@ function checkHowMany(limit, ab){
 //checks if player has won
 function checkWin(limiter, goblinLeft){
   if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
-    createWinBox();
-    createTryAgainButton();
+    createResultBox('win');
+    createReplayButton('win');
+    // clearInterval(goblinAppear);
   }
-}
-
-//starts the game every time start button is pressed
-function startGame(ev){
-  ev.preventDefault();
-  headerOne.remove();
-  headerTwo.remove();
-  addHealthScore();
-
-  let goblinAppear = setInterval(() => {
-  createGoblin(goblinAppear)}, secGob);
 }
 
 //displays the health score on upper right side
@@ -135,41 +142,49 @@ function addHealthScore(){
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
 }
 
+//checks whether health is at 0
+function checkHealth(){
+  if(castleHealth === 0){
+    createResultBox('lose');
+    createReplayButton('lose');
+    // clearInterval(goblinAppear);
+  }
+}
+
 //heatlh deteriorates when goblin reaches end;
 function deleteHealth(){
   castleHealth -= 1;
   checkHealth();
 }
 
-//creates "you lose" div
-function createLossBox(){
+//creates win or lose div after winning or losing
+function createResultBox(winOrLoseCase){
   let results = document.createElement('div');
   results.classList.add('results');
-  results.innerHTML = `YOU LOSE`;
+  switch(winOrLoseCase){
+    case 'win':
+      results.innerHTML = 'YOU WIN';
+      break;
+    case 'lose':
+      results.innerHTML = 'YOU LOSE';
+      break;
+  }
   main.appendChild(results);
 }
 
-//creates "you win" div
-function createWinBox(){
-  let resultsWin = document.createElement('div');
-  resultsWin.classList.add('results');
-  resultsWin.innerHTML = `YOU WIN`;
-  main.appendChild(resultsWin);
-}
-
-//creates "try again" button
-function createTryAgainButton(){
+//creates replay button for win or lose case
+function createReplayButton(winOrLose){
   let tryAgain = document.createElement('button');
   tryAgain.type = 'button';
-  tryAgain.id = 'try-again';
-  tryAgain.innerHTML = `Try Again?`;
-  main.appendChild(tryAgain);
-}
-
-//checks whether health is at 0
-function checkHealth(){
-  if(castleHealth === 0){
-    createLossBox();
-    createTryAgainButton();
+  tryAgain.id = 'replay-button';
+  switch(winOrLose){
+    case 'win':
+      tryAgain.innerHTML = `Try Again`;
+      break;
+    case 'lose':
+      tryAgain.innerHTML = `Play Again`;
+      break;
   }
+  main.appendChild(tryAgain);
+  tryAgain.addEventListener('click', startGame);
 }
