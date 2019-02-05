@@ -6,13 +6,13 @@ const headerOne = document.querySelector('.header-one');
 const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 let numberGoblins = 0;
-let castleHealth = 5;
+let castleHealth = 0;
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
   evg.preventDefault();
   const playName = input.value;
-  desc.innerHTML = `Welcome, ${playName}. Your task is to defend the castle from 3 hordes of goblins. Good luck.`
+  desc.innerHTML = `Welcome, ${playName}. Your task is to defend the castle from hordes of goblins. Good luck.`
   input.remove();
   button.remove();
 }
@@ -48,32 +48,38 @@ function createGoblin(bc){
     let allGoblins = document.querySelectorAll('.green-goblins');
     let currentGob = allGoblins[allGoblins.length - 1];
 
-    currentGob.addEventListener('click', () => {
-      slayGoblin(currentGob);
-    });
+    // currentGob.addEventListener('click', () => {
+    //   slayGoblin(currentGob);
+    // });
 
     currentGob.addEventListener('click', () => {
       setTimeout(() => {
         removeGoblin(currentGob);
-      }, 1000);
+        debugger;
+        let goblinLefter = document.querySelectorAll('.green-goblins');
+        checkWin(20, goblinLefter.length);
+      }, 500);
     });
 
-    setInterval(() => {goblins.classList.toggle('walk')}, 250);
+    setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 100);
+
+
+    // allGoblins.forEach(() => {
+    //   if(){
+    //     deleteHealth();
+    //     document.querySelector('');
+    //   }
+    // })
 
     numberGoblins += 1;
     checkHowMany(20, bc);
 }
 
 //changes gobl div to slayed goblin
-function slayGoblin(gobl){
-    gobl.classList.add('slayed');
-}
-
-// const ducks = document.querySelectorAll('div');
-// ducks.forEach((individualDuck) => {
-//     individualDuck.addEventListener('click', () => {eventShot(individualDuck)});
-//   })
+// function slayGoblin(gobl){
+//     gobl.classList.add('slayed');
+// }
 
 //removes gob div
 function removeGoblin(gob){
@@ -89,6 +95,12 @@ function moveGoblin(goblinOb){
 function checkHowMany(limit, ab){
   if(numberGoblins === limit){
     window.clearInterval(ab);
+  }
+}
+//checks if player has won
+function checkWin(limiter, goblinLeft){
+  if(numberGoblins === limiter && goblinLeft === 0){
+    alert('player has won');
   }
 }
 
@@ -110,4 +122,17 @@ function addHealthScore(){
   healthScore.innerHTML = `Health: ${castleHealth}`;
   header.appendChild(healthScore);
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+}
+
+//heatlh deteriorates when goblin reaches end;
+function deleteHealth(){
+  castleHealth -= 1;
+  checkHealth();
+}
+
+//checks whether health is at 0
+function checkHealth(){
+  if(castleHealth === 0){
+    alert('You lose');
+  }
 }
