@@ -54,16 +54,17 @@ function createGoblin(bc){
         removeGoblin(goblins);
         clearTimeout(checkGobWall);
         let goblinLefter = document.querySelectorAll('.green-goblins');
-        checkWin(5, goblinLefter.length);
+        checkWin(10, goblinLefter.length);
       }, 500);
     });
 
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 100);
     let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, 5000);
+    setTimeout(() => {removeGoblin(goblins)}, 5000)
 
     numberGoblins += 1;
-    checkHowMany(5, bc);
+    checkHowMany(10, bc);
 }
 
 function checkGobToWall(specificGob){
