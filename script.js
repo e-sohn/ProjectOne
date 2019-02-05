@@ -7,6 +7,9 @@ const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 let numberGoblins = 0;
 let castleHealth = 3;
+let goblinTotal = 5; //how many goblins created
+let goblinSeconds = 5000; //how long it takes goblin to reach wall
+let secGob = 500;
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -49,20 +52,25 @@ function createGoblin(bc){
     //   slayGoblin(goblins);
     // });
 
-    goblins.addEventListener('click', () => {
-      setTimeout(() => {
-        removeGoblin(goblins);
-        clearTimeout(checkGobWall);
-      }, 100);
-    });
-
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 50);
-    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, 10000);
-    setTimeout(() => {removeGoblin(goblins)}, 10000)
+    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, goblinSeconds); //removes health by 1 after 5 seconds
+    setTimeout(() => {removeGoblin(goblins)}, goblinSeconds); //removes goblin after 5 seconds
+
+    clickDeath(goblins, checkGobWall);
 
     numberGoblins += 1;
-    checkHowMany(5, bc);
+    checkHowMany(goblinTotal, bc);
+}
+
+// function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health
+function clickDeath(eachGob, removeHealth){
+  eachGob.addEventListener('click', () => {
+    setTimeout(() => {
+      removeGoblin(eachGob);
+      clearTimeout(removeHealth);
+    }, 100);
+  });
 }
 
 //checks to see if gob div reaches the wall and will subtract 1 from health
@@ -83,7 +91,7 @@ function checkGobToWall(specificGob){
 function removeGoblin(gob){
   gob.remove();
   let goblinLefter = document.querySelectorAll('.green-goblins');
-  checkWin(5, goblinLefter.length);
+  checkWin(goblinTotal, goblinLefter.length);
 }
 
 //moves goblin to the point where the wall is
@@ -112,7 +120,7 @@ function startGame(ev){
   addHealthScore();
 
   let goblinAppear = setInterval(() => {
-  createGoblin(goblinAppear)}, 5000);
+  createGoblin(goblinAppear)}, secGob);
 }
 
 //displays the health score on upper right side
