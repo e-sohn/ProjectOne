@@ -45,7 +45,7 @@ footer {
   background-position: 50px 0px;
   width: 50px;
   height: 60px;
-  transition: top 5s;
+  transition: top 10s;
   transition-timing-function: linear;
 }
 

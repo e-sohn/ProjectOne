@@ -6,7 +6,7 @@ const headerOne = document.querySelector('.header-one');
 const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 let numberGoblins = 0;
-let castleHealth = 10;
+let castleHealth = 3;
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -53,20 +53,19 @@ function createGoblin(bc){
       setTimeout(() => {
         removeGoblin(goblins);
         clearTimeout(checkGobWall);
-        let goblinLefter = document.querySelectorAll('.green-goblins');
-        checkWin(10, goblinLefter.length);
-      }, 500);
+      }, 100);
     });
 
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
-    setInterval(() => {moveGoblin(goblins)}, 100);
-    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, 5000);
-    setTimeout(() => {removeGoblin(goblins)}, 5000)
+    setInterval(() => {moveGoblin(goblins)}, 50);
+    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, 10000);
+    setTimeout(() => {removeGoblin(goblins)}, 10000)
 
     numberGoblins += 1;
-    checkHowMany(10, bc);
+    checkHowMany(5, bc);
 }
 
+//checks to see if gob div reaches the wall and will subtract 1 from health
 function checkGobToWall(specificGob){
   if(specificGob.style.top === '500px'){
     deleteHealth();
@@ -80,9 +79,11 @@ function checkGobToWall(specificGob){
 //     gobl.classList.add('slayed');
 // }
 
-//removes gob div
+//removes gob div and checks win after removing gob div
 function removeGoblin(gob){
   gob.remove();
+  let goblinLefter = document.querySelectorAll('.green-goblins');
+  checkWin(5, goblinLefter.length);
 }
 
 //moves goblin to the point where the wall is
@@ -98,7 +99,7 @@ function checkHowMany(limit, ab){
 }
 //checks if player has won
 function checkWin(limiter, goblinLeft){
-  if(numberGoblins === limiter && goblinLeft === 0){
+  if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
     alert('player has won');
   }
 }
@@ -111,7 +112,7 @@ function startGame(ev){
   addHealthScore();
 
   let goblinAppear = setInterval(() => {
-  createGoblin(goblinAppear)}, 1000);
+  createGoblin(goblinAppear)}, 5000);
 }
 
 //displays the health score on upper right side
