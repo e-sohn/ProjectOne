@@ -22,6 +22,10 @@ button {
   border-radius: 10px;
 }
 
+main {
+  font-size: 100px;
+}
+
 footer {
   bottom: 0;
   position: absolute;
@@ -65,3 +69,8 @@ footer {
 }
 
 /*  IDs */
+
+#try-again {
+  font-size: 30px;
+  padding: 10px;
+}

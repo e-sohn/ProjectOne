@@ -5,11 +5,12 @@ const form = document.querySelector('form');
 const headerOne = document.querySelector('.header-one');
 const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
+const main = document.querySelector('main');
 let numberGoblins = 0;
-let castleHealth = 3;
-let goblinTotal = 5; //how many goblins created
+let castleHealth = 5;
+let goblinTotal = 10; //how many goblins created
 let goblinSeconds = 5000; //how long it takes goblin to reach wall
-let secGob = 500;
+let secGob = 500; //how long for goblin to spawn
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -55,20 +56,21 @@ function createGoblin(bc){
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 50);
     let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, goblinSeconds); //removes health by 1 after 5 seconds
-    setTimeout(() => {removeGoblin(goblins)}, goblinSeconds); //removes goblin after 5 seconds
+    let removeGoblinAtWall = setTimeout(() => {removeGoblin(goblins)}, goblinSeconds); //removes goblin after 5 seconds
+    clickDeath(goblins, checkGobWall, removeGoblinAtWall); //attaches event listener on each goblin created so that when you click it removes
 
-    clickDeath(goblins, checkGobWall);
-
+    //limits number of goblins
     numberGoblins += 1;
     checkHowMany(goblinTotal, bc);
 }
 
 // function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health
-function clickDeath(eachGob, removeHealth){
+function clickDeath(eachGob, removeHealth, removeGoblinWall){
   eachGob.addEventListener('click', () => {
     setTimeout(() => {
       removeGoblin(eachGob);
       clearTimeout(removeHealth);
+      clearTimeout(removeGoblinWall);
     }, 100);
   });
 }
@@ -108,7 +110,8 @@ function checkHowMany(limit, ab){
 //checks if player has won
 function checkWin(limiter, goblinLeft){
   if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
-    alert('player has won');
+    createWinBox();
+    createTryAgainButton();
   }
 }
 
@@ -138,9 +141,35 @@ function deleteHealth(){
   checkHealth();
 }
 
+//creates "you lose" div
+function createLossBox(){
+  let results = document.createElement('div');
+  results.classList.add('results');
+  results.innerHTML = `YOU LOSE`;
+  main.appendChild(results);
+}
+
+//creates "you win" div
+function createWinBox(){
+  let resultsWin = document.createElement('div');
+  resultsWin.classList.add('results');
+  resultsWin.innerHTML = `YOU WIN`;
+  main.appendChild(resultsWin);
+}
+
+//creates "try again" button
+function createTryAgainButton(){
+  let tryAgain = document.createElement('button');
+  tryAgain.type = 'button';
+  tryAgain.id = 'try-again';
+  tryAgain.innerHTML = `Try Again?`;
+  main.appendChild(tryAgain);
+}
+
 //checks whether health is at 0
 function checkHealth(){
   if(castleHealth === 0){
-    alert('You lose');
+    createLossBox();
+    createTryAgainButton();
   }
 }
