@@ -6,7 +6,7 @@ const headerOne = document.querySelector('.header-one');
 const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 let numberGoblins = 0;
-let castleHealth = 0;
+let castleHealth = 10;
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -45,35 +45,33 @@ function createGoblin(bc){
     randomPos(goblins);
     document.body.appendChild(goblins);
 
-    let allGoblins = document.querySelectorAll('.green-goblins');
-    let currentGob = allGoblins[allGoblins.length - 1];
-
-    // currentGob.addEventListener('click', () => {
-    //   slayGoblin(currentGob);
+    // goblins.addEventListener('click', () => {
+    //   slayGoblin(goblins);
     // });
 
-    currentGob.addEventListener('click', () => {
+    goblins.addEventListener('click', () => {
       setTimeout(() => {
-        removeGoblin(currentGob);
-        debugger;
+        removeGoblin(goblins);
+        clearTimeout(checkGobWall);
         let goblinLefter = document.querySelectorAll('.green-goblins');
-        checkWin(20, goblinLefter.length);
+        checkWin(5, goblinLefter.length);
       }, 500);
     });
 
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 100);
-
-
-    // allGoblins.forEach(() => {
-    //   if(){
-    //     deleteHealth();
-    //     document.querySelector('');
-    //   }
-    // })
+    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, 5000);
 
     numberGoblins += 1;
-    checkHowMany(20, bc);
+    checkHowMany(5, bc);
+}
+
+function checkGobToWall(specificGob){
+  if(specificGob.style.top === '500px'){
+    deleteHealth();
+    let healthBar = document.querySelector('.health');
+    healthBar.innerHTML = `Health: ${castleHealth}`;
+  }
 }
 
 //changes gobl div to slayed goblin
