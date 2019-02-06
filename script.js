@@ -10,7 +10,7 @@ let numberGoblins = 0;
 let castleHealth = 5;
 let goblinTotal = 10; //how many goblins created
 let goblinSeconds = 5000; //how long it takes goblin to reach wall
-let secGob = 3000; //how long for goblin to spawn
+let secGob = 500; //how long for goblin to spawn
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 
 //Creates second page with instructions and removes input and first button after submitting the name
@@ -129,7 +129,7 @@ function checkWin(limiter, goblinLeft){
   if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
     createResultBox('win');
     createReplayButton('win');
-    // clearInterval(goblinAppear);
+    document.querySelector('header').firstElementChild.remove();
   }
 }
 
@@ -149,6 +149,9 @@ function checkHealth(cd){
     createResultBox('lose');
     createReplayButton('lose');
     clearInterval(cd);
+    document.querySelector('header').firstElementChild.remove();
+    let gobbsLeft = document.querySelectorAll('.green-goblins');
+    gobbsLeft.forEach((gobbles) => {gobbles.remove()});
   }
 }
 
