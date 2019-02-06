@@ -8,7 +8,7 @@ const header = document.querySelector('header');
 const main = document.querySelector('main');
 let numberGoblins = 0;
 let castleHealth = 5;
-let goblinTotal = 10; //how many goblins created
+let goblinTotal = 8; //how many goblins created
 let goblinSeconds = 5000; //how long it takes goblin to reach wall
 let secGob = 500; //how long for goblin to spawn
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
@@ -18,7 +18,7 @@ button.addEventListener('click', (ev) => {
   ev.preventDefault();
   createSecondPage();
   createButtonTwo();
-});
+})
 
 // Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(){
@@ -37,21 +37,39 @@ function createButtonTwo(){
   buttonTwo.addEventListener('click', startGame);
 }
 
-//starts the game every time start button is pressed
+//starts the game when start button is pressed
 function startGame(eve){
   eve.preventDefault();
   headerOne.remove();
   headerTwo.remove();
 
-  // let mainStuff = document.querySelector('main');
-  // mainStuff.children.remove();
-
   castleHealth = 5;
   addHealthScore();
 
   let goblinAppear = setInterval(() => {
-  createGoblin(goblinAppear)}, secGob);
+  createGoblin();
+  let length = document.querySelectorAll('.green-goblins').length;
+  let lastGoblin = document.querySelectorAll('.green-goblins')[length - 1];
+  setInterval(() => {lastGoblin.classList.toggle('walk')}, 100);
+  setInterval(() => {moveGoblin(lastGoblin)}, 50);
+  let checkGobWall = setTimeout(() => {checkGobToWall(lastGoblin)}, goblinSeconds); //removes health by 1 and removes goblin after however long it takes to reach wall
+  clickDeath(lastGoblin, checkGobWall); //attaches event listener on each goblin created so that when you click it removes
+
+  //limits number of goblins
+  numberGoblins += 1;
+  checkHowMany(goblinTotal, goblinAppear);
+
+  }, secGob);
+
 }
+// goblins.addEventListener('click', () => {
+//   slayGoblin(goblins);
+// });
+
+//changes gobl div to slayed goblin
+// function slayGoblin(gobl){
+//     gobl.classList.add('slayed');
+// }
 
 //positions goblin at random position on the top of page
 function randomPos(goblinObjects){
@@ -60,62 +78,11 @@ function randomPos(goblinObjects){
 }
 
 //creates goblin with function it wants to stop as parameter
-function createGoblin(bc){
+function createGoblin(){
     let goblins = document.createElement('div');
     goblins.setAttribute('class', 'green-goblins');
     randomPos(goblins);
     document.body.appendChild(goblins);
-
-    // goblins.addEventListener('click', () => {
-    //   slayGoblin(goblins);
-    // });
-
-    setInterval(() => {goblins.classList.toggle('walk')}, 100);
-    setInterval(() => {moveGoblin(goblins)}, 50);
-    let checkGobWall = setTimeout(() => {checkGobToWall(goblins, bc)}, goblinSeconds); //removes health by 1 after 5 seconds
-    let removeGoblinAtWall = setTimeout(() => {removeGoblin(goblins)}, goblinSeconds); //removes goblin after 5 seconds
-    clickDeath(goblins, checkGobWall, removeGoblinAtWall); //attaches event listener on each goblin created so that when you click it removes
-
-    //limits number of goblins
-    numberGoblins += 1;
-    checkHowMany(goblinTotal, bc);
-}
-
-// function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health
-function clickDeath(eachGob, removeHealth, removeGoblinWall){
-  eachGob.addEventListener('click', () => {
-    setTimeout(() => {
-      removeGoblin(eachGob);
-      clearTimeout(removeHealth);
-      clearTimeout(removeGoblinWall);
-    }, 100);
-  });
-}
-
-//checks to see if gob div reaches the wall and will subtract 1 from health
-function checkGobToWall(specificGob, de){
-  if(specificGob.style.top === howFarDownGobWalk){
-    checkHealth(de);
-    let healthBar = document.querySelector('.health');
-    healthBar.innerHTML = `Health: ${castleHealth}`;
-  }
-}
-
-//changes gobl div to slayed goblin
-// function slayGoblin(gobl){
-//     gobl.classList.add('slayed');
-// }
-
-//removes gob div and checks win after removing gob div
-function removeGoblin(gob){
-  gob.remove();
-  let goblinLefter = document.querySelectorAll('.green-goblins');
-  checkWin(goblinTotal, goblinLefter.length);
-}
-
-//moves goblin to the point where the wall is
-function moveGoblin(goblinOb){
-  goblinOb.style.top = howFarDownGobWalk;
 }
 
 //checks how many number of goblins and stops running function when it reaches limit
@@ -125,9 +92,44 @@ function checkHowMany(limit, ab){
   }
 }
 
+// function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health
+function clickDeath(eachGob, removeHealth){
+  eachGob.addEventListener('click', () => {
+    setTimeout(() => {
+      eachGob.remove();
+      clearTimeout(removeHealth);
+    }, 100);
+  });
+}
+
+//subtracts 1 from health, removes gob from div, and checkswin
+function checkGobToWall(specificGob){
+  castleHealth -= 1;
+  let healthBar = document.querySelector('.health');
+  healthBar.innerHTML = `Health: ${castleHealth}`;
+  specificGob.remove();
+
+  let goblinLefter = document.querySelectorAll('.green-goblins');
+  checkWin(goblinTotal, goblinLefter.length);
+}
+
+//moves goblin to the point where the wall is
+function moveGoblin(goblinOb){
+  goblinOb.style.top = howFarDownGobWalk;
+}
+
 //checks if player has won
 function checkWin(limiter, goblinLeft){
-  if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
+  if(castleHealth === 0){
+    createResultBox('lose');
+    createReplayButton('lose');
+    document.querySelector('header').firstElementChild.remove();
+
+    let gobbsLeft = document.querySelectorAll('.green-goblins');
+    gobbsLeft.forEach((gobbles) => {
+      gobbles.remove()});
+  }
+  else if(numberGoblins === limiter && goblinLeft === 0){
     createResultBox('win');
     createReplayButton('win');
     document.querySelector('header').firstElementChild.remove();
@@ -141,19 +143,6 @@ function addHealthScore(){
   healthScore.innerHTML = `Health: ${castleHealth}`;
   header.appendChild(healthScore);
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-}
-
-//health deteriorates by one and then checks whether health is at 0
-function checkHealth(cd){
-  castleHealth -= 1;
-  if(castleHealth === 0){
-    createResultBox('lose');
-    createReplayButton('lose');
-    clearInterval(cd);
-    document.querySelector('header').firstElementChild.remove();
-    let gobbsLeft = document.querySelectorAll('.green-goblins');
-    gobbsLeft.forEach((gobbles) => {gobbles.remove()});
-  }
 }
 
 //creates win or lose div after winning or losing
@@ -185,5 +174,8 @@ function createReplayButton(winOrLose){
       break;
   }
   main.appendChild(tryAgain);
-  tryAgain.addEventListener('click', startGame);
+  tryAgain.addEventListener('click', (ev) => {
+    document.querySelector('#replay-button').remove();
+    document.querySelector('.results').remove();
+  });
 }
