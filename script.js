@@ -35,20 +35,18 @@ function createButtonTwo(){
   buttonTwo.setAttribute('class', 'second-button');
   buttonTwo.innerHTML = 'Start';
   form.appendChild(buttonTwo);
-  buttonTwo.addEventListener('click', startGame);
+  buttonTwo.addEventListener('click', gameUnlimitedGoblins);
 }
 
-//starts the game when start button is pressed
-function startGame(eve){
-  eve.preventDefault();
+//resets castleHealth to beginning
+function reset(){
   headerOne.remove();
   headerTwo.remove();
-
-  castleHealth = castleHealthBeginning; //resets castleHealth
-  numberGoblins = 0; //resets numberGoblins
+  castleHealth = castleHealthBeginning;
   addHealthScore();
+}
 
-  let goblinAppear = setInterval(() => {
+function createGoblinAddIntAndEventList(){
   createGoblin();
   let lengthOfGoblinList = document.querySelectorAll('.green-goblins').length;
   let lastGoblin = document.querySelectorAll('.green-goblins')[lengthOfGoblinList - 1];
@@ -60,20 +58,29 @@ function startGame(eve){
   let intervalToSubtractHealthGobToWall = setTimeout(() => {subtractHealthGobToWall(lastGoblin)}, secondsToWall); //removes health by 1 and removes goblin after however long it takes to reach wall
 
   clickDeath(lastGoblin, intervalToSubtractHealthGobToWall); //attaches event listener on each goblin created so that when you click it removes
+};
 
-  numberGoblins += 1;
-  checkHowMany(goblinTotal, goblinAppear); //limits number of goblins
+//starts the game when start button is pressed
+function startGame(eve){
+  eve.preventDefault();
+  reset();
+  numberGoblins = 0; //resets numberGoblins
+
+  let goblinAppear = setInterval(() => {
+    createGoblinAddIntAndEventList();
+    numberGoblins += 1;
+    checkHowMany(goblinTotal, goblinAppear); //limits number of goblins
   }, timeGoblinSpawn);
 
 }
-// goblins.addEventListener('click', () => {
-//   slayGoblin(goblins);
-// });
 
-//changes gobl div to slayed goblin
-// function slayGoblin(gobl){
-//     gobl.classList.add('slayed');
-// }
+function gameUnlimitedGoblins(eve){
+  eve.preventDefault();
+  reset();
+  let goblinAppear = setInterval(() => {
+    createGoblinAddIntAndEventList();
+  }, timeGoblinSpawn);
+}
 
 //positions goblin at random position on the top of page
 function randomPos(goblinObjects){
@@ -99,14 +106,24 @@ function checkHowMany(limit, setIntervalStop){
 // function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health, also checks win
 function clickDeath(eachGoblin, healthInterval){
   eachGoblin.addEventListener('click', () => {
-    setTimeout(() => {
-      eachGoblin.remove();
-      clearTimeout(healthInterval);
-      let goblinsLeft = document.querySelectorAll('.green-goblins');
-      checkWin(goblinTotal, goblinsLeft.length);
-    }, 100);
+    eachGoblin.remove();
+    clearTimeout(healthInterval);
+    let goblinsLeft = document.querySelectorAll('.green-goblins');
+    checkWin(goblinTotal, goblinsLeft.length);
+    //if I add slayGoblin function add function inside setTimeout with the above 4 lines
+    // setTimeout(() => {
+    // }, 100);
   });
 }
+
+// goblins.addEventListener('click', () => {
+//   slayGoblin(goblins);
+// });
+
+//changes gobl div to slayed goblin
+// function slayGoblin(gobl){
+//     gobl.classList.add('slayed');
+// }
 
 //subtracts 1 from health, removes gob from div, and checks if player lost
 function subtractHealthGobToWall(specificGob){
