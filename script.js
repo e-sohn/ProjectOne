@@ -1,5 +1,5 @@
 const desc = document.querySelector('.description');
-const button = document.querySelector('button');
+const button = document.querySelector('#first-button');
 const input = document.querySelector('input');
 const form = document.querySelector('form');
 const headerOne = document.querySelector('.header-one');
@@ -13,11 +13,17 @@ let goblinSeconds = 5000; //how long it takes goblin to reach wall
 let secGob = 500; //how long for goblin to spawn
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 
-//Creates second page with instructions and removes input and first button after submitting the name
-function createSecondPage(evg){
-  evg.preventDefault();
+//Intro with eventListener on first name submit button
+button.addEventListener('click', (ev) => {
+  ev.preventDefault();
+  createSecondPage();
+  createButtonTwo();
+});
+
+// Creates second page with instructions and removes input and first button after submitting the name
+function createSecondPage(){
   const playName = input.value;
-  desc.innerHTML = `Welcome, ${playName}. Your task is to defend the castle from hordes of goblins. Good luck.`
+  desc.innerHTML = `Welcome, ${playName}. There is a horde of goblins running to destroy the wall. Kill the goblins by clicking on them with the pointer before they reach the wall. Good luck.`
   input.remove();
   button.remove();
 }
@@ -31,15 +37,9 @@ function createButtonTwo(){
   buttonTwo.addEventListener('click', startGame);
 }
 
-//Intro with eventListener on first name submit button
-button.addEventListener('click', (ev) => {
-  createSecondPage(ev);
-  createButtonTwo();
-})
-
 //starts the game every time start button is pressed
-function startGame(ev){
-  ev.preventDefault();
+function startGame(eve){
+  eve.preventDefault();
   headerOne.remove();
   headerTwo.remove();
 
@@ -124,6 +124,7 @@ function checkHowMany(limit, ab){
     window.clearInterval(ab);
   }
 }
+
 //checks if player has won
 function checkWin(limiter, goblinLeft){
   if(numberGoblins === limiter && goblinLeft === 0 && castleHealth > 0){
@@ -177,10 +178,10 @@ function createReplayButton(winOrLose){
   tryAgain.id = 'replay-button';
   switch(winOrLose){
     case 'win':
-      tryAgain.innerHTML = `Try Again`;
+      tryAgain.innerHTML = `Play Again`;
       break;
     case 'lose':
-      tryAgain.innerHTML = `Play Again`;
+      tryAgain.innerHTML = `Try Again`;
       break;
   }
   main.appendChild(tryAgain);
