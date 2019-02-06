@@ -10,8 +10,8 @@ let numberGoblins = 0;
 let castleHealth = 5;
 let goblinTotal = 10; //how many goblins created
 let goblinSeconds = 5000; //how long it takes goblin to reach wall
-let secGob = 500; //how long for goblin to spawn
-let howFarDownGobWalk = '700px';
+let secGob = 3000; //how long for goblin to spawn
+let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 
 //Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(evg){
@@ -72,7 +72,7 @@ function createGoblin(bc){
 
     setInterval(() => {goblins.classList.toggle('walk')}, 100);
     setInterval(() => {moveGoblin(goblins)}, 50);
-    let checkGobWall = setTimeout(() => {checkGobToWall(goblins)}, goblinSeconds); //removes health by 1 after 5 seconds
+    let checkGobWall = setTimeout(() => {checkGobToWall(goblins, bc)}, goblinSeconds); //removes health by 1 after 5 seconds
     let removeGoblinAtWall = setTimeout(() => {removeGoblin(goblins)}, goblinSeconds); //removes goblin after 5 seconds
     clickDeath(goblins, checkGobWall, removeGoblinAtWall); //attaches event listener on each goblin created so that when you click it removes
 
@@ -93,9 +93,9 @@ function clickDeath(eachGob, removeHealth, removeGoblinWall){
 }
 
 //checks to see if gob div reaches the wall and will subtract 1 from health
-function checkGobToWall(specificGob){
+function checkGobToWall(specificGob, de){
   if(specificGob.style.top === howFarDownGobWalk){
-    deleteHealth();
+    checkHealth(de);
     let healthBar = document.querySelector('.health');
     healthBar.innerHTML = `Health: ${castleHealth}`;
   }
@@ -142,19 +142,14 @@ function addHealthScore(){
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
 }
 
-//checks whether health is at 0
-function checkHealth(){
+//health deteriorates by one and then checks whether health is at 0
+function checkHealth(cd){
+  castleHealth -= 1;
   if(castleHealth === 0){
     createResultBox('lose');
     createReplayButton('lose');
-    // clearInterval(goblinAppear);
+    clearInterval(cd);
   }
-}
-
-//heatlh deteriorates when goblin reaches end;
-function deleteHealth(){
-  castleHealth -= 1;
-  checkHealth();
 }
 
 //creates win or lose div after winning or losing
