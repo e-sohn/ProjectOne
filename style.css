@@ -51,6 +51,7 @@ footer {
   width: 50px;
   height: 60px;
   transition: top 5s;
+  /* change transition if you want to change how long it takes for goblin to reach end */
   transition-timing-function: linear;
 }
 
@@ -72,6 +73,7 @@ footer {
 .results {
   color: white;
 }
+
 
 /*  IDs */
 
