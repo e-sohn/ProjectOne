@@ -129,6 +129,11 @@ function checkWin(limiter, goblinLeft, stopIterator){
     createReplayButton('lose');
     document.querySelector('header').firstElementChild.remove();
 
+    let highestTimeoutId = setTimeout(";");
+    for (var i = 0 ; i < highestTimeoutId ; i++) {
+      clearTimeout(i);
+    };
+    
     window.clearInterval(stopIterator);
 
     let gobbsLeft = document.querySelectorAll('.green-goblins');
