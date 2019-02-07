@@ -7,11 +7,11 @@ const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 const main = document.querySelector('main');
 let numberGoblins = 0;
-let castleHealthBeginning = 3; //how much health to start off with
+let castleHealthBeginning = 5; //how much health to start off with
 let castleHealth = castleHealthBeginning;
-let goblinTotal = 5; //how many goblins created
-let secondsToWall = 5000; //how long it takes goblin to reach wall, must change css transition of green-goblin to match
-let timeGoblinSpawn = 500; //how long for goblin to spawn
+let goblinTotal = 20; //how many goblins created
+let secondsToWall = 3000; //how long it takes goblin to reach wall, must change css transition of green-goblin to match
+let timeGoblinSpawn = 300; //how long for goblin to spawn
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 let scoreCounter = 0; //how many goblins killed or clicked on
 let whatGame = 0; //switch that indicates whether game is in unlimited (0) or at easy game(1)
@@ -37,8 +37,13 @@ function createUnlimitedButton(){
   const buttonUnlimited = document.createElement('button');
   buttonUnlimited.setAttribute('class', 'unlimited-button');
   buttonUnlimited.innerHTML = 'Unlimited Goblins Mode';
-  form.appendChild(buttonUnlimited);
-  buttonUnlimited.addEventListener('click', startUnlimitedMode);
+  main.appendChild(buttonUnlimited);
+  buttonUnlimited.addEventListener('click', (ev) => {
+    let mainNodes = document.querySelector('main').childNodes;
+    mainNodes.forEach((x) => {x.remove()});
+    mainNodes[0].remove();
+    startUnlimitedMode(ev);
+  });
 };
 
 //creates easy game button
@@ -46,19 +51,11 @@ function createEasyGameButton(){
   const buttonEasy = document.createElement('button');
   buttonEasy.setAttribute('class', 'easy-button');
   buttonEasy.innerHTML = 'Easy Mode';
-  form.appendChild(buttonEasy);
-  buttonEasy.addEventListener('click', startEasyGame)
-};
-
-function createEasyButton(){
-  let easyButtonAgain = document.createElement('button');
-  easyButtonAgain.id = 'replay-button';
-  easyButtonAgain.innerHTML = `Play Easy Mode`;
-
-  main.appendChild(easyButtonAgain);
-  easyButtonAgain.addEventListener('click', (ev) => {
-    document.querySelector('#replay-button').remove();
-    document.querySelector('.results').remove();
+  main.appendChild(buttonEasy);
+  buttonEasy.addEventListener('click', (ev) => {
+    let mainNodes = document.querySelector('main').childNodes;
+    mainNodes.forEach((x) => {x.remove()});
+    mainNodes[0].remove();
     startEasyGame(ev);
   });
 };
@@ -183,7 +180,8 @@ function moveGoblin(eachGoblinElement){
 function checkWin(limiter, goblinLeft){
   if(castleHealth === 0){
     createResultBox('lose');
-    createEasyButton();
+    createUnlimitedButton();
+    createEasyGameButton();
     document.querySelectorAll('span').forEach((allButtons) => {allButtons.remove()});
 
     //removes all setInterval and setTimeout created, taken from stackOverflow, need this for lose case because some goblins that are created still have setTimeout methods
@@ -200,7 +198,8 @@ function checkWin(limiter, goblinLeft){
 
   else if(numberGoblins === limiter && goblinLeft === 0){
     createResultBox('win');
-    createEasyButton();
+    createUnlimitedButton();
+    createEasyGameButton();
     document.querySelectorAll('span').forEach((allButtons) => {allButtons.remove()});
   }
 };
