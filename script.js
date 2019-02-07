@@ -79,9 +79,6 @@ function createGoblinAddIntAndEventList(){
   let lengthOfGoblinList = document.querySelectorAll('.green-goblins').length;
   let lastGoblin = document.querySelectorAll('.green-goblins')[lengthOfGoblinList - 1];
 
-  // let numberOfSecondsToWall = secondsToWall/1000;
-  // lastGoblin.style.transition = 'top ' + 'numberOfSecondsToWall' + 's';
-
   setInterval(() => {lastGoblin.classList.toggle('walk')}, 100); //toggles the class of the lastGoblin that was just created to walk
 
   setTimeout(() => {moveGoblin(lastGoblin)}, 50); //sets lastgoblin position after 50 milisecond
@@ -153,20 +150,8 @@ function clickDeath(eachGoblin, healthInterval){
     clearTimeout(healthInterval);
     let goblinsLeft = document.querySelectorAll('.green-goblins');
     checkWin(goblinTotal, goblinsLeft.length);
-    //if I add slayGoblin function add function inside setTimeout with the above 4 lines
-    // setTimeout(() => {
-    // }, 100);
   });
 };
-
-// goblins.addEventListener('click', () => {
-//   slayGoblin(goblins);
-// });
-
-//changes gobl div to slayed goblin
-// function slayGoblin(gobl){
-//     gobl.classList.add('slayed');
-// }
 
 //subtracts 1 from health, removes gob from div, and checks if player lost
 function subtractHealthGobToWall(specificGob){
@@ -236,14 +221,14 @@ function createResultBox(winOrLoseCase){
   results.classList.add('results');
   switch(winOrLoseCase){
     case 'win':
-      results.innerHTML = 'YOU WIN. Play Again?';
+      results.innerHTML = 'YOU WIN';
       break;
     case 'lose':
       if(whatGame === 0){
         results.innerHTML = `Your Score is ${scoreCounter}`;
       }
       else if(whatGame === 1){
-        results.innerHTML = 'YOU LOSE. Try Again?';
+        results.innerHTML = 'YOU LOSE';
       }
       break;
   }
