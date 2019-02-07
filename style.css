@@ -33,6 +33,13 @@ footer {
   width: 100%;
 }
 
+span {
+  font-size: 50px;
+  text-align: left;
+  color: white;
+  padding: 20px;
+}
+
 /*  Classes */
 
 .header-one {
@@ -63,17 +70,27 @@ footer {
   background-position: 300px 700px;
 }
 
-.health {
-  font-size: 50px;
-  text-align: left;
-  color: white;
-  padding: 20px;
-}
-
 .results {
   color: white;
 }
 
+.unlimited-button {
+  font-size: 30px;
+  padding: 10px;
+}
+
+.easy-button {
+  font-size: 30px;
+  padding: 10px;
+}
+
+.header {
+  float: left;
+}
+
+.score {
+
+}
 
 /*  IDs */
 

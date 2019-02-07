@@ -13,12 +13,15 @@ let goblinTotal = 5; //how many goblins created
 let secondsToWall = 5000; //how long it takes goblin to reach wall, must change css transition of green-goblin to match
 let timeGoblinSpawn = 500; //how long for goblin to spawn
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
+let scoreCounter = 0; //how many goblins killed or clicked on
+let whatGame = 0; //switch that indicates whether game is in unlimited (0) or at easy game(1)
 
 //Intro with eventListener on first name submit button
 button.addEventListener('click', (ev) => {
   ev.preventDefault();
   createSecondPage();
-  createButtonTwo();
+  createUnlimitedButton();
+  createEasyGameButton();
 })
 
 // Creates second page with instructions and removes input and first button after submitting the name
@@ -29,13 +32,35 @@ function createSecondPage(){
   button.remove();
 }
 
-//Creates start button to play the game after submitting name
-function createButtonTwo(){
-  const buttonTwo = document.createElement('button');
-  buttonTwo.setAttribute('class', 'second-button');
-  buttonTwo.innerHTML = 'Start';
-  form.appendChild(buttonTwo);
-  buttonTwo.addEventListener('click', gameUnlimitedGoblins);
+//Creates unlimited game button to play the game after submitting name
+function createUnlimitedButton(){
+  const buttonUnlimited = document.createElement('button');
+  buttonUnlimited.setAttribute('class', 'unlimited-button');
+  buttonUnlimited.innerHTML = 'Unlimited Goblins Mode';
+  form.appendChild(buttonUnlimited);
+  buttonUnlimited.addEventListener('click', startUnlimitedMode);
+}
+
+//creates easy game button
+function createEasyGameButton(){
+  const buttonEasy = document.createElement('button');
+  buttonEasy.setAttribute('class', 'easy-button');
+  buttonEasy.innerHTML = 'Easy Mode';
+  form.appendChild(buttonEasy);
+  buttonEasy.addEventListener('click', startEasyGame)
+}
+
+function createEasyButton(){
+  let easyButtonAgain = document.createElement('button');
+  easyButtonAgain.id = 'replay-button';
+  easyButtonAgain.innerHTML = `Play Easy Mode`;
+
+  main.appendChild(easyButtonAgain);
+  easyButtonAgain.addEventListener('click', (ev) => {
+    document.querySelector('#replay-button').remove();
+    document.querySelector('.results').remove();
+    startEasyGame(ev);
+  });
 }
 
 //resets castleHealth to beginning
@@ -44,8 +69,10 @@ function reset(){
   headerTwo.remove();
   castleHealth = castleHealthBeginning;
   addHealthScore();
+  scoreCounter = 0;
 }
 
+//creates goblin div and attaches intervals to animate and move them. also an interval that subtracts health by 1 after goblin reaches wall and add event listener to the goblin
 function createGoblinAddIntAndEventList(){
   createGoblin();
   let lengthOfGoblinList = document.querySelectorAll('.green-goblins').length;
@@ -60,11 +87,12 @@ function createGoblinAddIntAndEventList(){
   clickDeath(lastGoblin, intervalToSubtractHealthGobToWall); //attaches event listener on each goblin created so that when you click it removes
 };
 
-//starts the game when start button is pressed
-function startGame(eve){
+//starts the game on easy mode
+function startEasyGame(eve){
   eve.preventDefault();
   reset();
   numberGoblins = 0; //resets numberGoblins
+  whatGame = 1;
 
   let goblinAppear = setInterval(() => {
     createGoblinAddIntAndEventList();
@@ -74,9 +102,13 @@ function startGame(eve){
 
 }
 
-function gameUnlimitedGoblins(eve){
+//starts the game on unlimited mode
+function startUnlimitedMode(eve){
   eve.preventDefault();
   reset();
+  showScore();
+  whatGame = 0;
+
   let goblinAppear = setInterval(() => {
     createGoblinAddIntAndEventList();
   }, timeGoblinSpawn);
@@ -106,6 +138,13 @@ function checkHowMany(limit, setIntervalStop){
 // function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health, also checks win
 function clickDeath(eachGoblin, healthInterval){
   eachGoblin.addEventListener('click', () => {
+    //only add to scoreCounter and show on scoreCount if playing on unlimitedGoblin Mode
+    if(whatGame === 0){
+      scoreCounter += 1;
+      let scoreCount = document.querySelector('.score');
+      scoreCount.innerHTML = `Score: ${scoreCounter}`;
+    }
+
     eachGoblin.remove();
     clearTimeout(healthInterval);
     let goblinsLeft = document.querySelectorAll('.green-goblins');
@@ -145,8 +184,8 @@ function moveGoblin(eachGoblinElement){
 function checkWin(limiter, goblinLeft){
   if(castleHealth === 0){
     createResultBox('lose');
-    createReplayButton('lose');
-    document.querySelector('header').firstElementChild.remove();
+    createEasyButton();
+    document.querySelectorAll('span').forEach((allButtons) => {allButtons.remove()});
 
     //removes all setInterval and setTimeout created, taken from stackOverflow, need this for lose case because some goblins that are created still have setTimeout methods
     let highestTimeoutId = setTimeout(";");
@@ -162,18 +201,27 @@ function checkWin(limiter, goblinLeft){
 
   else if(numberGoblins === limiter && goblinLeft === 0){
     createResultBox('win');
-    createReplayButton('win');
-    document.querySelector('header').firstElementChild.remove();
+    createEasyButton();
+    document.querySelectorAll('span').forEach((allButtons) => {allButtons.remove()});
   }
 }
 
-//displays the health score on upper right side
+//displays the health score on upper left side
 function addHealthScore(){
-  let healthScore = document.createElement('div');
+  let healthScore = document.createElement('span');
   healthScore.classList.add('health');
   healthScore.innerHTML = `Health: ${castleHealth}`;
   header.appendChild(healthScore);
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+}
+
+//displays score on the upper right side
+function showScore(){
+  let score = document.createElement('span');
+  score.classList.add('score');
+  score.innerHTML = `Score: ${scoreCounter}`;
+  header.appendChild(score);
+  header.style.backgroundColor = 'rgba(0, 0, 0, 0)'
 }
 
 //creates win or lose description after winning or losing
@@ -182,31 +230,11 @@ function createResultBox(winOrLoseCase){
   results.classList.add('results');
   switch(winOrLoseCase){
     case 'win':
-      results.innerHTML = 'YOU WIN';
+      results.innerHTML = 'YOU WIN. Play Again?';
       break;
     case 'lose':
-      results.innerHTML = 'YOU LOSE';
+      results.innerHTML = 'YOU LOSE. Try Again?';
       break;
   }
   main.appendChild(results);
-}
-
-//creates replay button for win or lose case, and add eventListener to those buttons to restart the game
-function createReplayButton(winOrLose){
-  let tryAgain = document.createElement('button');
-  tryAgain.id = 'replay-button';
-  switch(winOrLose){
-    case 'win':
-      tryAgain.innerHTML = `Play Again`;
-      break;
-    case 'lose':
-      tryAgain.innerHTML = `Try Again`;
-      break;
-  }
-  main.appendChild(tryAgain);
-  tryAgain.addEventListener('click', (ev) => {
-    document.querySelector('#replay-button').remove();
-    document.querySelector('.results').remove();
-    startGame(ev);
-  });
 }
