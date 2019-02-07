@@ -1,26 +1,27 @@
 # Purpose
-Defend the Castle is a game where the goal is to keep the castle intact before the enemy destroys it. There will be 20 goblins traversing the field starting from the top and making their way to the wall on the bottom. Players will click on the goblin to kill them. If the goblin reaches the wall on the bottom, players health will reduce by one. If the health reaches 0, the player loses and the game will restart to the home page.
+Wall Defense is a game where the goal is to keep the wall intact before the enemy destroys it. Hordes of goblins will traverse the field starting from the top and making their way to the bottom. Players will click on the goblin to kill them. If the goblin reaches the wall before the player clicks on them, the wall's health will reduce by one and the goblin will be destroyed. If the wall's health reaches 0, the player loses and the game will restart to the home page.
 
 # Game Mechanics
-Initial page where player inputs Name
-Next page shows instructions and how to beat the Game
-Actual game starts with goblins hidden on the left side
-One comes out from the left side every 5 seconds
-When goblin reaches the wall, they disappear in holes of the wall
-Create eventlistener so that when player clicks enemy, enemy is killed
-Create health variable, and shows up on the upper right hand screen
-Health is reduced by one when enemy reaches finish line
-Add images of goblins
-When player has killed all goblins before health reaches 0, they win.
+Initial page where player inputs Name.
+Next page shows instructions and how to beat the Game.
+Actual game starts with goblins hidden on the top of the page.
+Each goblin will appear one by one and make their way to the bottom of the page.
+When each goblin reaches the wall, they disappear.
+Create eventlisteners so that when player clicks on the goblin, the goblin is killed.
+Create health variable which shows up on the center top of the screen.
+Health is reduced by one when a goblin reaches the finish line.
+Add images and animations of the goblins.
+When player has killed all the goblins before wall's health reaches 0, player wins.
+Create two game modes, one with only limited goblins appearing and another with unlimited goblins.
+In the unlimited goblins mode, create a counter that keeps track of how many goblins were clicked on. Then display that score when wall's health reaches 0 and the game ends.
 
 # Post MVP
-As the game gets closer to the end, goblins comes out faster
-More rounds and keep track of round # on the bottom right screen
-Different types of enemies with different speed and different health
-Different weapons
-Animation of enemies attacking the wall
-Add objects to the board
-Animation when castle health lowers
+Create rounds in easy mode and keep track of round # on the bottom right screen.
+Different types of enemies with different speed and different health.
+Change cursor of the mouse to a sword.  
+Animation of enemies attacking the wall.
+Add objects to the board.
+Animation when castle health lowers. 
 
 #Potential problems
 Adjusting size of the window will change the location of the wall.
