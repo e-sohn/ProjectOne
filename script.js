@@ -7,11 +7,12 @@ const headerTwo = document.querySelector('.header-two');
 const header = document.querySelector('header');
 const main = document.querySelector('main');
 let numberGoblins = 0;
-let castleHealthBeginning = 5; //how much health to start off with
+let castleHealthBeginning = 10; //how much health to start off with
 let castleHealth = castleHealthBeginning;
-let goblinTotal = 20; //how many goblins created
+let goblinTotal = 20; //how many goblins created in easy
 let secondsToWall = 3000; //how long it takes goblin to reach wall, must change css transition of green-goblin to match
-let timeGoblinSpawn = 300; //how long for goblin to spawn
+let timeGoblinSpawnEasy = 500; //how long for goblin spawn in easy mode
+let timeGoblinSpawnUnlimited = 300; //how long goblin spawn in unlimited
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 let scoreCounter = 0; //how many goblins killed or clicked on
 let whatGame = 0; //switch that indicates whether game is in unlimited (0) or at easy game(1)
@@ -27,7 +28,7 @@ button.addEventListener('click', (ev) => {
 // Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(){
   const playName = input.value;
-  desc.innerHTML = `Welcome, ${playName}. There is a horde of goblins running to destroy the wall. Kill the goblins by clicking on them with the pointer before they reach the wall. Good luck.`
+  desc.innerHTML = `Welcome, ${playName}. There is a horde of goblins coming to destroy the wall. Kill the goblins by clicking on them with your pointer before they reach the wall. Good luck.`
   input.remove();
   button.remove();
 };
@@ -36,7 +37,7 @@ function createSecondPage(){
 function createUnlimitedButton(){
   const buttonUnlimited = document.createElement('button');
   buttonUnlimited.setAttribute('class', 'unlimited-button');
-  buttonUnlimited.innerHTML = 'Unlimited Goblins Mode';
+  buttonUnlimited.innerHTML = 'Unlimited Mode';
   main.appendChild(buttonUnlimited);
   buttonUnlimited.addEventListener('click', (ev) => {
     let mainNodes = document.querySelector('main').childNodes;
@@ -95,7 +96,7 @@ function startEasyGame(eve){
     createGoblinAddIntAndEventList();
     numberGoblins += 1;
     checkHowMany(goblinTotal, goblinAppear); //limits number of goblins
-  }, timeGoblinSpawn);
+  }, timeGoblinSpawnEasy);
 };
 
 //starts the game on unlimited mode
@@ -107,7 +108,7 @@ function startUnlimitedMode(eve){
 
   let goblinAppear = setInterval(() => {
     createGoblinAddIntAndEventList();
-  }, timeGoblinSpawn);
+  }, timeGoblinSpawnUnlimited);
 };
 
 //positions goblin at random position on the top of page
