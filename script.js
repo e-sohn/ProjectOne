@@ -22,7 +22,7 @@ button.addEventListener('click', (ev) => {
   createSecondPage();
   createUnlimitedButton();
   createEasyGameButton();
-})
+});
 
 // Creates second page with instructions and removes input and first button after submitting the name
 function createSecondPage(){
@@ -30,7 +30,7 @@ function createSecondPage(){
   desc.innerHTML = `Welcome, ${playName}. There is a horde of goblins running to destroy the wall. Kill the goblins by clicking on them with the pointer before they reach the wall. Good luck.`
   input.remove();
   button.remove();
-}
+};
 
 //Creates unlimited game button to play the game after submitting name
 function createUnlimitedButton(){
@@ -39,7 +39,7 @@ function createUnlimitedButton(){
   buttonUnlimited.innerHTML = 'Unlimited Goblins Mode';
   form.appendChild(buttonUnlimited);
   buttonUnlimited.addEventListener('click', startUnlimitedMode);
-}
+};
 
 //creates easy game button
 function createEasyGameButton(){
@@ -48,7 +48,7 @@ function createEasyGameButton(){
   buttonEasy.innerHTML = 'Easy Mode';
   form.appendChild(buttonEasy);
   buttonEasy.addEventListener('click', startEasyGame)
-}
+};
 
 function createEasyButton(){
   let easyButtonAgain = document.createElement('button');
@@ -58,19 +58,19 @@ function createEasyButton(){
   main.appendChild(easyButtonAgain);
   easyButtonAgain.addEventListener('click', (ev) => {
     document.querySelector('#replay-button').remove();
-    document.querySelector('.results').remove();
+    document.querySelectorAll('.results').forEach((resultDisplay) => {resultDisplay.remove()});
     startEasyGame(ev);
   });
-}
+};
 
-//resets castleHealth to beginning
+//resets castleHealth to beginning and scoreCounter to 0, also displays health
 function reset(){
   headerOne.remove();
   headerTwo.remove();
   castleHealth = castleHealthBeginning;
   addHealthScore();
   scoreCounter = 0;
-}
+};
 
 //creates goblin div and attaches intervals to animate and move them. also an interval that subtracts health by 1 after goblin reaches wall and add event listener to the goblin
 function createGoblinAddIntAndEventList(){
@@ -99,8 +99,7 @@ function startEasyGame(eve){
     numberGoblins += 1;
     checkHowMany(goblinTotal, goblinAppear); //limits number of goblins
   }, timeGoblinSpawn);
-
-}
+};
 
 //starts the game on unlimited mode
 function startUnlimitedMode(eve){
@@ -112,13 +111,13 @@ function startUnlimitedMode(eve){
   let goblinAppear = setInterval(() => {
     createGoblinAddIntAndEventList();
   }, timeGoblinSpawn);
-}
+};
 
 //positions goblin at random position on the top of page
 function randomPos(goblinObjects){
   goblinObjects.style.top = '-20px';
   goblinObjects.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-}
+};
 
 //creates goblin div
 function createGoblin(){
@@ -126,14 +125,14 @@ function createGoblin(){
     goblins.setAttribute('class', 'green-goblins');
     randomPos(goblins);
     document.body.appendChild(goblins);
-}
+};
 
 //checks how many number of goblins were created and stops running setInterval when it reaches limit of goblins that you want to create
 function checkHowMany(limit, setIntervalStop){
   if(numberGoblins === limit){
     window.clearInterval(setIntervalStop);
   }
-}
+};
 
 // function to add event listener on goblin so that every time you click on it, it removes goblin and clears timeout of health, also checks win
 function clickDeath(eachGoblin, healthInterval){
@@ -153,7 +152,7 @@ function clickDeath(eachGoblin, healthInterval){
     // setTimeout(() => {
     // }, 100);
   });
-}
+};
 
 // goblins.addEventListener('click', () => {
 //   slayGoblin(goblins);
@@ -173,12 +172,12 @@ function subtractHealthGobToWall(specificGob){
 
   let goblinLeftover = document.querySelectorAll('.green-goblins');
   checkWin(goblinTotal, goblinLeftover.length);
-}
+};
 
 //moves goblin to the point where the wall is
 function moveGoblin(eachGoblinElement){
   eachGoblinElement.style.top = howFarDownGobWalk;
-}
+};
 
 //checks if player has won or lost
 function checkWin(limiter, goblinLeft){
@@ -204,7 +203,7 @@ function checkWin(limiter, goblinLeft){
     createEasyButton();
     document.querySelectorAll('span').forEach((allButtons) => {allButtons.remove()});
   }
-}
+};
 
 //displays the health score on upper left side
 function addHealthScore(){
@@ -213,7 +212,7 @@ function addHealthScore(){
   healthScore.innerHTML = `Health: ${castleHealth}`;
   header.appendChild(healthScore);
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-}
+};
 
 //displays score on the upper right side
 function showScore(){
@@ -222,7 +221,7 @@ function showScore(){
   score.innerHTML = `Score: ${scoreCounter}`;
   header.appendChild(score);
   header.style.backgroundColor = 'rgba(0, 0, 0, 0)'
-}
+};
 
 //creates win or lose description after winning or losing
 function createResultBox(winOrLoseCase){
@@ -233,8 +232,14 @@ function createResultBox(winOrLoseCase){
       results.innerHTML = 'YOU WIN. Play Again?';
       break;
     case 'lose':
+      if(whatGame === 0){
+        let displayScore = document.createElement('div');
+        displayScore.classList.add('results');
+        displayScore.innerHTML = `Your Score is ${scoreCounter}`;
+        main.appendChild(displayScore);
+      };
       results.innerHTML = 'YOU LOSE. Try Again?';
       break;
   }
   main.appendChild(results);
-}
+};
