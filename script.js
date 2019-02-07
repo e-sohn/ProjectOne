@@ -58,7 +58,7 @@ function createEasyButton(){
   main.appendChild(easyButtonAgain);
   easyButtonAgain.addEventListener('click', (ev) => {
     document.querySelector('#replay-button').remove();
-    document.querySelectorAll('.results').forEach((resultDisplay) => {resultDisplay.remove()});
+    document.querySelector('.results').remove();
     startEasyGame(ev);
   });
 };
@@ -233,12 +233,11 @@ function createResultBox(winOrLoseCase){
       break;
     case 'lose':
       if(whatGame === 0){
-        let displayScore = document.createElement('div');
-        displayScore.classList.add('results');
-        displayScore.innerHTML = `Your Score is ${scoreCounter}`;
-        main.appendChild(displayScore);
-      };
-      results.innerHTML = 'YOU LOSE. Try Again?';
+        results.innerHTML = `Your Score is ${scoreCounter}`;
+      }
+      else if(whatGame === 1){
+        results.innerHTML = 'YOU LOSE. Try Again?';
+      }
       break;
   }
   main.appendChild(results);
