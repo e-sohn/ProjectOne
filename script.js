@@ -11,12 +11,12 @@ let castleHealthBeginning = 10; //how much health to start off with
 let castleHealth = castleHealthBeginning;
 let goblinTotal = 20; //how many goblins created in easy
 let milliSecondsToWall = 2000; //how long it takes goblin to reach wall
-let secondsToWall = milliSecondsToWall/1000;
+let secondsToWall = milliSecondsToWall/1000; 
 let timeGoblinSpawnEasy = 800; //how long for goblin spawn in easy mode
 let timeGoblinSpawnUnlimited = 400; //how long goblin spawn in unlimited
 let howFarDownGobWalk = '700px'; //how far goblin walks down to the wall, may need to change based on screen size
 let scoreCounter = 0; //how many goblins killed or clicked on
-let whatGame = 0; //switch that indicates whether game is in unlimited (0) or at easy game(1)
+let whatGame = 0; //switch that indicates whether game is in unlimited (0) or easy mode(1)
 
 //Intro with eventListener on first name submit button
 button.addEventListener('click', (ev) => {
